@@ -1,0 +1,80 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:react/recommended",
+        "plugin:promise/recommended",
+        "plugin:react-hooks/recommended",
+        "next/core-web-vitals",
+        "plugin:prettier/recommended"
+    ],
+    "globals": {
+        "JSX": true,
+        "React": true
+    },
+    "ignorePatterns": [
+        "api/clients/CoopApi.ts",
+        "next-env.d.ts",
+        "out/",
+        "tools/poeditor/_api.ts"
+    ],
+    "overrides": [
+        {
+            "files": ["**/*.js", "**/*.mjs"],
+            "rules": {
+                "@typescript-eslint/explicit-function-return-type": "off",
+                "@typescript-eslint/no-var-requires": "off",
+                "@typescript-eslint/no-unsafe-argument": "off",
+                "@typescript-eslint/no-unsafe-assignment": "off",
+                "@typescript-eslint/no-unsafe-call": "off",
+                "@typescript-eslint/no-unsafe-member-access": "off",
+                "@typescript-eslint/no-unsafe-return": "off"
+            }
+        },
+        {
+            "files": ["**/*.tsx"],
+            "rules": {
+                "@typescript-eslint/explicit-function-return-type": "off"
+            }
+        }
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "tsconfig.json",
+        "tsconfigRootDir": "."
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "prettier",
+        "promise",
+        "react",
+        "react-hooks",
+        "simple-import-sort"
+    ],
+    "rules": {
+        "@typescript-eslint/explicit-function-return-type": [
+            "error",
+            {
+                "allowExpressions": true,
+                "allowHigherOrderFunctions": false,
+                "allowTypedFunctionExpressions": true
+            }
+        ],
+        "@typescript-eslint/no-misused-promises": [
+            "error",
+            {
+                "checksVoidReturn": false
+            }
+        ],
+        "@typescript-eslint/no-unused-vars": "error",
+        "max-len": ["error", 120, 2],
+        "no-alert": "error",
+        "no-console": "error",
+        "one-var": ["error", "never"],
+        "react/jsx-sort-props": "error",
+        "simple-import-sort/exports": "error",
+        "simple-import-sort/imports": "error"
+    }
+}

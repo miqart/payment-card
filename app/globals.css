@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  height: 100%;
+}
+
+@layer base {
+  button[type="submit"] {
+    @apply bg-primary px-4 py-2 rounded text-white hover:bg-opacity-90 disabled:bg-opacity-50
+  }
+
+  input:focus, select:focus {
+    @apply outline-0 border-primary
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .flexCenter {
+    @apply flex items-center justify-center
+  }
+
+  .cardText {
+    @apply tracking-wider block overflow-hidden text-ellipsis whitespace-pre text-slate-200 font-bold uppercase
+  }
+
+  .cardTextLabel {
+    @apply tracking-wider uppercase font-normal text-[10px] text-slate-300
+  }
+
+  .cardShadow {
+    @apply shadow-[0_5px_10px_0_rgba(0,0,0,1)]
+  }
+}
+
+/* Not included in tailwind yet */
+@layer utilities {
+  .rotate-y-180 {
+    rotate: y 180deg;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .rotateTransition {
+    transition: rotate .8s ease;
+  }
+
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .perspective500 {
+    perspective: 500px;
+  }
+}
