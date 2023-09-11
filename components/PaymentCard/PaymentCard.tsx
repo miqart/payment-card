@@ -8,7 +8,7 @@ import {
   TPaymentCardSchema,
 } from "components/PaymentCard/validation";
 import { DatePicker, Input } from "components/reusable";
-import { useState } from "react";
+import React, { FocusEvent, useState } from "react";
 import { FormProvider } from "react-hook-form";
 import { SubmitHandler, useForm, useWatch } from "react-hook-form";
 import { getEndOfMonth } from "utils";
@@ -33,7 +33,7 @@ const PaymentCard = () => {
     formState: { isSubmitting },
   } = methods;
 
-  const [focused, setFocused] = useState("");
+  const [rotated, setRotated] = useState<boolean>(false);
 
   const cardnumber = useWatch({ control, name: "cardnumber" });
 
@@ -47,10 +47,20 @@ const PaymentCard = () => {
     );
   };
 
+  const onFocusCvv = () => {
+    setRotated(true);
+  };
+
+  const onBlurCvv = (e: FocusEvent<HTMLInputElement>) => {
+    if (e.relatedTarget?.id === "card") return;
+
+    setRotated(false);
+  };
+
   return (
     <FormProvider {...methods}>
       <div className="relative w-[600px] text-center">
-        <CardView focused={focused} />
+        <CardView rotated={rotated} setRotated={setRotated} />
         <form
           className="flexCenter flex-col  gap-y-9 rounded bg-white p-12 pt-32 shadow-xl"
           onSubmit={handleSubmit(onSubmit)}
@@ -79,13 +89,14 @@ const PaymentCard = () => {
             <Input
               label="CVV"
               name="cvv"
+              onBlur={onBlurCvv}
+              onFocus={onFocusCvv}
               onValid={(cvv) => {
                 const cvvErrorMessage = getCvvErrorMessage({ cardnumber, cvv });
                 if (!cvvErrorMessage) {
                   setFocus("name");
                 }
               }}
-              setFocused={setFocused}
               type="number"
               width="w-1/2"
             />

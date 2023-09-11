@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { Dispatch, FocusEvent, HTMLInputTypeAttribute } from "react";
+import { FocusEvent, HTMLInputTypeAttribute } from "react";
 import { Controller, FieldPath, FieldValues, useFormContext } from "react-hook-form";
 
 interface IInputProps<T extends FieldValues> {
@@ -11,11 +11,19 @@ interface IInputProps<T extends FieldValues> {
   width?: string;
   type?: HTMLInputTypeAttribute;
   onValid?: (value: string) => void;
-  setFocused?: Dispatch<React.SetStateAction<string>>;
+  onFocus?: (e: FocusEvent<HTMLInputElement>) => void;
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
 }
 
-const Input = <T extends FieldValues>({ name, label, width, onValid, setFocused, type = "text" }: IInputProps<T>) => {
+const Input = <T extends FieldValues>({
+  name,
+  label,
+  width,
+  type = "text",
+  onValid,
+  onFocus,
+  onBlur: onHandleBlur,
+}: IInputProps<T>) => {
   const { control } = useFormContext<T>();
 
   return (
@@ -30,14 +38,14 @@ const Input = <T extends FieldValues>({ name, label, width, onValid, setFocused,
               "border-red-500 focus:border-red-500": !!error?.message,
             })}
             onFocus={(e) => {
-              setFocused && setFocused(e.target.name);
+              onFocus?.(e);
             }}
             type={type}
             value={value}
             {...rest}
-            onBlur={() => {
+            onBlur={(e) => {
               onBlur();
-              setFocused && setFocused("");
+              onHandleBlur?.(e);
             }}
             onChange={(e) => {
               onChange(e);

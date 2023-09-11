@@ -5,7 +5,7 @@ import AmexIcon from "icons/amex.svg";
 import MasterIcon from "icons/master.svg";
 import VisaIcon from "icons/visa.svg";
 import { Ruda } from "next/font/google";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { getCardType, getFormattedDate } from "utils";
 
@@ -14,22 +14,21 @@ import { TPaymentCardSchema } from "./validation";
 const ruda = Ruda({ weight: ["400", "700"], subsets: ["latin"] });
 
 interface ICardViewProps {
-  focused: string;
+  rotated: boolean;
+  setRotated: Dispatch<SetStateAction<boolean>>;
 }
 
-const CardView = ({ focused }: ICardViewProps) => {
+const CardView = ({ rotated, setRotated }: ICardViewProps) => {
   const { control } = useFormContext<TPaymentCardSchema>();
   const [cardnumber, expires, name, cvv] = useWatch({
     control,
     name: ["cardnumber", "expires", "name", "cvv"],
   });
 
-  const [isRotated, setIsRotated] = useState<boolean>(false);
-
   const { isVisa, isMaster, isAmex } = getCardType(cardnumber);
 
   const onCardClick = () => {
-    setIsRotated((prev) => !prev);
+    setRotated((prev) => !prev);
   };
 
   return (
@@ -38,13 +37,15 @@ const CardView = ({ focused }: ICardViewProps) => {
         ruda.className,
         "perspective500 group absolute inset-x-0 mx-auto mt-[-110px] h-[210px] w-[333px] cursor-pointer"
       )}
+      id="card"
       onClick={onCardClick}
+      tabIndex={0}
     >
       <div
         className={clsx(
           "rounded-lg relative h-full bg-neutral-950  ",
           "cardShadow preserve-3d rotateTransition",
-          (isRotated || focused === "cvv") && "rotate-y-180"
+          rotated && "rotate-y-180"
         )}
       >
         <div className="bg-cover absolute h-full w-full bg-[url('/card-front.png')] bg-no-repeat px-6 pt-24 text-left">
