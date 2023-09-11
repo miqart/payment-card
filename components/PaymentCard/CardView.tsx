@@ -5,12 +5,13 @@ import AmexIcon from "icons/amex.svg";
 import MasterIcon from "icons/master.svg";
 import VisaIcon from "icons/visa.svg";
 import { Ruda } from "next/font/google";
+import { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-
-const ruda = Ruda({ weight: ["400", "700"], subsets: ["latin"] });
 import { getCardType, getFormattedDate } from "utils";
 
 import { TPaymentCardSchema } from "./validation";
+
+const ruda = Ruda({ weight: ["400", "700"], subsets: ["latin"] });
 
 interface ICardViewProps {
   focused: string;
@@ -18,13 +19,18 @@ interface ICardViewProps {
 
 const CardView = ({ focused }: ICardViewProps) => {
   const { control } = useFormContext<TPaymentCardSchema>();
-
-  const [number, expires, name, cvv] = useWatch({
+  const [cardnumber, expires, name, cvv] = useWatch({
     control,
-    name: ["number", "expires", "name", "cvv"],
+    name: ["cardnumber", "expires", "name", "cvv"],
   });
 
-  const { isVisa, isMaster, isAmex } = getCardType(number);
+  const [isRotated, setIsRotated] = useState<boolean>(false);
+
+  const { isVisa, isMaster, isAmex } = getCardType(cardnumber);
+
+  const onCardClick = () => {
+    setIsRotated((prev) => !prev);
+  };
 
   return (
     <div
@@ -32,20 +38,21 @@ const CardView = ({ focused }: ICardViewProps) => {
         ruda.className,
         "perspective500 group absolute inset-x-0 mx-auto mt-[-110px] h-[210px] w-[333px] cursor-pointer"
       )}
+      onClick={onCardClick}
     >
       <div
         className={clsx(
           "rounded-lg relative h-full bg-neutral-950  ",
           "cardShadow preserve-3d rotateTransition",
-          focused === "cvv" && "rotate-y-180"
+          (isRotated || focused === "cvv") && "rotate-y-180"
         )}
       >
         <div className="bg-cover absolute h-full w-full bg-[url('/card-front.png')] bg-no-repeat px-6 pt-24 text-left">
-          <span className="cardText text-xl h-7">{number.match(/.{1,4}/g)?.join(" ")}</span>
-          <label className="flex items-center gap-x-1">
+          <span className="cardText text-xl h-7">{cardnumber.match(/.{1,4}/g)?.join(" ")}</span>
+          <div className="flex items-center gap-x-1 cursor-pointer">
             <span className="cardTextLabel">Valid Thru</span>
             <span className="cardText">{getFormattedDate(expires)}</span>
-          </label>
+          </div>
           <div className="flex items-center mt-4 h-8">
             <span className="cardText text-s px-1">{name}</span>
             <div className="ml-auto">
@@ -61,10 +68,10 @@ const CardView = ({ focused }: ICardViewProps) => {
             "rotate-y-180 backface-hidden"
           )}
         >
-          <label className="flex items-center gap-x-5 pt-20 px-6">
+          <div className="flex items-center gap-x-5 pt-20 px-6 cursor-pointer">
             <span className="cardTextLabel text-sm">CVV</span>
-            <span className="cardText text-slate-800 italic">{cvv}</span>
-          </label>
+            <span className="cardText text-slate-800 italic h-6">{cvv}</span>
+          </div>
         </div>
       </div>
     </div>

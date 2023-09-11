@@ -15,7 +15,7 @@ interface IInputProps<T extends FieldValues> {
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
 }
 
-const Input = <T extends FieldValues>({ label, name, width, onValid, setFocused, type = "text" }: IInputProps<T>) => {
+const Input = <T extends FieldValues>({ name, label, width, onValid, setFocused, type = "text" }: IInputProps<T>) => {
   const { control } = useFormContext<T>();
 
   return (

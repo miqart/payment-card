@@ -37,6 +37,9 @@ const DatePicker = <T extends FieldValues>({ label, name, width, onValid }: IDat
                 onValid(v as Date);
               }
             }}
+            onKeyDown={(e) => {
+              e.preventDefault();
+            }}
             portalId="root"
             ref={(elem) => {
               // This is workaround as react-datepicker implements a custom ref and handling from rhf is not triggered

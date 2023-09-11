@@ -6,7 +6,7 @@ export const paymentCardSchema = z.object({
     .string()
     .min(1, "Card holder name can not be empty!")
     .max(25, "Card holder name must be maximum 25 digits long!"),
-  number: z
+  cardnumber: z
     .string()
     .min(16, "Card number must be at least 16 digits long!")
     .max(19, "Card number must be maximum 19 digits long!")
@@ -30,11 +30,11 @@ export const paymentCardSchemaWithEffects = paymentCardSchema.superRefine((data,
 export type TPaymentCardSchema = z.infer<typeof paymentCardSchemaWithEffects>;
 
 // getCvvErrorMessage
-const numberAndCvv = paymentCardSchema.pick({ number: true, cvv: true });
-type NumberAndCvv = z.infer<typeof numberAndCvv>;
+const cardNumberAndCvv = paymentCardSchema.pick({ cardnumber: true, cvv: true });
+type CardNumberAndCvv = z.infer<typeof cardNumberAndCvv>;
 
-export const getCvvErrorMessage = ({ number, cvv }: NumberAndCvv): string | null => {
-  const { isVisa, isMaster, isAmex } = getCardType(number);
+export const getCvvErrorMessage = ({ cardnumber, cvv }: CardNumberAndCvv): string | null => {
+  const { isVisa, isMaster, isAmex } = getCardType(cardnumber);
 
   if ((isVisa || isMaster) && cvv.length !== 3) {
     return "Visa/Master card should have 3 digits long CVV!";

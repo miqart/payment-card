@@ -19,7 +19,7 @@ const PaymentCard = () => {
   const methods = useForm<TPaymentCardSchema>({
     defaultValues: {
       name: "",
-      number: "",
+      cardnumber: "",
       expires: getEndOfMonth(),
       cvv: "",
     },
@@ -35,7 +35,7 @@ const PaymentCard = () => {
 
   const [focused, setFocused] = useState("");
 
-  const number = useWatch({ control, name: "number" });
+  const cardnumber = useWatch({ control, name: "cardnumber" });
 
   const onSubmit: SubmitHandler<TPaymentCardSchema> = async (data) => {
     await new Promise((resolve) =>
@@ -57,9 +57,9 @@ const PaymentCard = () => {
         >
           <Input
             label="Number"
-            name="number"
+            name="cardnumber"
             onValid={(value) => {
-              if (paymentCardSchema.shape.number.safeParse(value).success) {
+              if (paymentCardSchema.shape.cardnumber.safeParse(value).success) {
                 setFocus("expires");
               }
             }}
@@ -80,7 +80,7 @@ const PaymentCard = () => {
               label="CVV"
               name="cvv"
               onValid={(cvv) => {
-                const cvvErrorMessage = getCvvErrorMessage({ number, cvv });
+                const cvvErrorMessage = getCvvErrorMessage({ cardnumber, cvv });
                 if (!cvvErrorMessage) {
                   setFocus("name");
                 }
