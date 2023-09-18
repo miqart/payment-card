@@ -48,7 +48,12 @@ const CardView = ({ rotated, setRotated }: ICardViewProps) => {
           rotated && "rotate-y-180"
         )}
       >
-        <div className="bg-cover absolute h-full w-full bg-[url('/card-front.png')] bg-no-repeat px-6 pt-24 text-left">
+        <div
+          className={clsx(
+            "bg-cover absolute h-full w-full bg-[url('/card-front.png')] bg-no-repeat px-6 pt-24 text-left",
+            "backface-hidden"
+          )}
+        >
           <span className="cardText text-xl h-7">{cardnumber.match(/.{1,4}/g)?.join(" ")}</span>
           <div className="flex items-center gap-x-1 cursor-pointer">
             <span className="cardTextLabel">Valid Thru</span>
@@ -65,7 +70,7 @@ const CardView = ({ rotated, setRotated }: ICardViewProps) => {
         </div>
         <div
           className={clsx(
-            "absolute h-full w-full bg-[url('/card-back.png')] bg-no-repeat bg-cover",
+            "absolute h-full w-full bg-[url('/card-back.png')] bg-no-repeat bg-cover rounded-lg",
             "rotate-y-180 backface-hidden"
           )}
         >
